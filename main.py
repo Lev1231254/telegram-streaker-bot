@@ -4,7 +4,7 @@ from telebot.types import ReplyKeyboardMarkup
 import database
 from database import show_users_from_db, is_name_and_streak, add_user_to_db
 
-bot = telebot.TeleBot('8219633615:AAFW_6GsVXxvPhKBRrLRRS_XQtAaSHy8D2I')
+bot = telebot.TeleBot('')
 
 
 @bot.message_handler(commands=["start"])
