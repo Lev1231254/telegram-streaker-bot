@@ -3,8 +3,10 @@ from telebot import types
 from telebot.types import ReplyKeyboardMarkup
 from bot_db_handler import *
 import time
+import os
 
-bot = telebot.TeleBot('8219633615:AAFW_6GsVXxvPhKBRrLRRS_XQtAaSHy8D2I')
+
+bot = telebot.TeleBot(os.environ["telegram-api-token"])
 
 sort_streaks("streaks.json")
 reply_info = ("/add - добавиться в бота\n" +
