@@ -1,7 +1,8 @@
 import database
 from database import *
 
-file_name = "streaks.json"
+db_file = "streaks.json"
+
 
 #check if reply is name and streak
 def is_name_and_streak(text: str) -> bool:
@@ -13,7 +14,7 @@ def is_name_and_streak(text: str) -> bool:
         try:
             float(streak_num)
             return True
-        except ValueError:
+        except ValueError as e:
             return False
     return False
 
@@ -34,8 +35,8 @@ def convert_reply_to_streak(message : types.Message) -> Streak:
     streak_num = message.text.split()[1]
     description = ""
     #save last description
-    if get_streak_by_id("streaks.json", str(message.chat.id)).user_id != "0":
-        description = get_streak_by_id("streaks.json", str(message.chat.id)).description
+    if get_streak_by_id(db_file, str(message.chat.id)).user_id != "0":
+        description = get_streak_by_id(db_file, str(message.chat.id)).description
 
     result = Streak(user_id, name, streak_num, description)
     return result
@@ -43,7 +44,7 @@ def convert_reply_to_streak(message : types.Message) -> Streak:
 
 def send_given_streak(bot : telebot.TeleBot, message : types.Message, user_streak : Streak) -> None:
     # update all streak numbers in db
-    update_users_streak_number(file_name)
+    update_users_streak_number(db_file)
 
     reply = user_streak.name + " " + user_streak.streak_num
 
@@ -51,8 +52,8 @@ def send_given_streak(bot : telebot.TeleBot, message : types.Message, user_strea
 
 
 def send_user_streak(bot : telebot.TeleBot, message : types.Message) -> None:
-    update_users_streak_number(file_name)
-    user_streak = get_streak_by_id(file_name, str(message.from_user.id))
+    update_users_streak_number(db_file)
+    user_streak = get_streak_by_id(db_file, str(message.from_user.id))
 
     if user_streak.user_id == 0:
         bot.send_message(message.chat.id, "у тебя нет стрика")
@@ -62,9 +63,9 @@ def send_user_streak(bot : telebot.TeleBot, message : types.Message) -> None:
 
 def send_streaks(bot : telebot.TeleBot, message : types.Message) -> None:
     #update all streak numbers in db
-    update_users_streak_number(file_name)
+    update_users_streak_number(db_file)
 
-    data = read_streaks(file_name)
+    data = read_streaks(db_file)
     reply = ""
 
     i = 1
@@ -75,9 +76,9 @@ def send_streaks(bot : telebot.TeleBot, message : types.Message) -> None:
     bot.send_message(message.chat.id, reply)
 
 def send_variable(bot : telebot.TeleBot, user_id : str,  message : types.Message, variable : str) -> None:
-    update_users_streak_number(file_name)
+    update_users_streak_number(db_file)
 
-    value = get_variable(file_name, user_id, variable)
+    value = get_variable(db_file, user_id, variable)
 
 
     if value != "":
